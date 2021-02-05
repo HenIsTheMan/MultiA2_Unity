@@ -1,16 +1,10 @@
 using UnityEngine;
-using System.Collections;
-
-using System;
 using System.Text;
-using System.Net;
 using System.Net.Sockets;
 using UnityEngine.UI;
-using System.Threading;
 
 public class TCPSend : MonoBehaviour
 {
-    private static int localPort;
 
     // prefs
     public string IP = "127.0.0.1";  // define in init
