@@ -9,10 +9,10 @@ namespace VirtualChat {
 
         private TcpClient client;
 
-        [SerializeField] string IP = "127.0.0.1"; //??
-        [SerializeField] int port;
-        [SerializeField] Text textInput;
-        [SerializeField] Text textOutput;
+        [SerializeField] private string IP = "127.0.0.1"; //??
+        [SerializeField] private int port;
+        [SerializeField] private InputField textInputBox;
+        [SerializeField] private Text textOutput;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace VirtualChat {
 
             IP = "127.0.0.1"; //??
             port = 0;
-            textInput = null;
+            textInputBox = null;
             textOutput = null;
         }
 
@@ -35,7 +35,7 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
-			UnityEngine.Assertions.Assert.IsNotNull(textInput);
+			UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(textOutput);
         }
 
@@ -60,7 +60,8 @@ namespace VirtualChat {
         #endregion
 
         public void OnSendButtonClicked() {
-            SendStr(textInput.text);
+            SendStr(textInputBox.text);
+            textInputBox.text = string.Empty;
         }
 
         private void SendStr(string msg) {

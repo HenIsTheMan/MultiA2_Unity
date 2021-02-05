@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IP: 127.0.0.1
   port: 7890
-  textInput: {fileID: 1403105797410254292}
+  textInputField: {fileID: 1403105796701512945}
   textOutput: {fileID: 1403105796909956942}
 --- !u!114 &8176398103043303007
 MonoBehaviour:
