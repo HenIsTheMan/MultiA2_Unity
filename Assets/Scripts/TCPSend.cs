@@ -47,14 +47,15 @@ public class TCPSend : MonoBehaviour
         //port = 7890;
 
         client = new TcpClient(IP, port);
-        sendString("Hello World i am ??");     
+        sendString("Hello World!");     
     }
 
     public void Clicked()
     {
         sendString(textInput.text);
     }
-    // sendData
+
+
     private void sendString(string message)
     {
         NetworkStream stream = client.GetStream();
@@ -63,10 +64,7 @@ public class TCPSend : MonoBehaviour
         {
             byte[] data = Encoding.UTF8.GetBytes(message);
 
-            // Send the message to the connected TCP/IP Server.
             stream.Write(data, 0, data.Length);
-
-            Debug.Log("Writing");
         }
       
     }
@@ -81,13 +79,8 @@ public class TCPSend : MonoBehaviour
             // This method blocks until at least one byte is read.
             client.GetStream().Read(bytes, 0, (int)client.ReceiveBufferSize);
 
-            // Returns the data received from the host to the console.
             string returndata = Encoding.UTF8.GetString(bytes);
-            string test = textOutput.text + returndata;
-            Debug.Log(textOutput.text + test);
-            Debug.Log(textOutput.text.Length);
-            textOutput.text = "asdasd" + returndata;
-            Debug.Log("This is what the host returned to you: " + returndata);
+            textOutput.text = returndata;
         }
     }
 
