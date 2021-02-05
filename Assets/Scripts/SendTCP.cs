@@ -41,13 +41,14 @@ namespace VirtualChat {
 
         private void Start() {
             client = new TcpClient(IP, port);
-            //SendStr("Hello World!"); //??
+            SendStr("Hello World!");
         }
 
         private void Update() {
-            if(client.GetStream().DataAvailable) {
+            NetworkStream stream = client.GetStream();
+            if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
-                client.GetStream().Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread until at least 1 byte is read
+                stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread until at least 1 byte is read
                 textOutput.text = Encoding.UTF8.GetString(bytes);
             }
         }
