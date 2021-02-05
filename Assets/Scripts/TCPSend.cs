@@ -44,7 +44,7 @@ public class TCPSend : MonoBehaviour
     {
 
         // define
-        port = 7890;
+        //port = 7890;
 
         client = new TcpClient(IP, port);
         sendString("Hello World i am ??");     
@@ -63,7 +63,7 @@ public class TCPSend : MonoBehaviour
         {
             byte[] data = Encoding.UTF8.GetBytes(message);
 
-            // Send the message to the connected TcpServer.
+            // Send the message to the connected TCP/IP Server.
             stream.Write(data, 0, data.Length);
 
             Debug.Log("Writing");

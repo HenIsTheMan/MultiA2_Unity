@@ -153,6 +153,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1403105796665838463}
+  - component: {fileID: 8176398103043303008}
+  - component: {fileID: 8176398103043303007}
   m_Layer: 0
   m_Name: NetConnect
   m_TagString: Untagged
@@ -174,6 +176,37 @@ Transform:
   m_Father: {fileID: 1403105797502105309}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8176398103043303008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403105796665838450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb7b135be6900f4a967eb44cbc6b401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IP: 127.0.0.1
+  port: 9876
+  textInput: {fileID: 1403105797410254292}
+  textOutput: {fileID: 1403105796909956942}
+--- !u!114 &8176398103043303007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403105796665838450}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550f0362460c6f44493a1a8db3ffbe4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IP: 127.0.0.1
+  port: 0
+  textInput: {fileID: 0}
 --- !u!1 &1403105796701512947
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,7 +421,7 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
