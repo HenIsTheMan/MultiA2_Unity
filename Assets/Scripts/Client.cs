@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace VirtualChat {
-    internal sealed class Client: MonoBehaviour {
+    internal sealed class Client {
         #region Fields
         #endregion
 

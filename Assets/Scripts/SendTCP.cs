@@ -65,10 +65,6 @@ namespace VirtualChat {
                 for(int i = 0; i < spacePosIndicesSize; ++i) {
                     if(i == 0) {
                         txts.Add(rawStr.Substring(0, spacePosIndices[0]));
-                    } else if(i == spacePosIndicesSize - 1) {
-                        if(spacePosIndices[i] + 1 != rawStrLen) {
-                            txts.Add(rawStr.Substring(spacePosIndices[i] + 1, rawStrLen - 1));
-                        }
                     } else {
                         txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
                     }
@@ -79,13 +75,13 @@ namespace VirtualChat {
                     string commandIdentifier = txt1st.Substring(2);
 
                     if(commandIdentifier == "AddClient") {
-                        Client client = new Client();
+						Client client = new Client {
+							Index = int.Parse(txts[1]),
+							Username = txts[2],
+							MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]))
+						};
 
-                        client.Index = int.Parse(txts[1]);
-                        client.Username = txts[2];
-                        client.MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]));
-
-                        UniversalData.AddClient(client);
+						UniversalData.AddClient(client);
                     } else if(commandIdentifier == "RemoveClient") {
                         UniversalData.RemoveClient(int.Parse(txts[1]));
                     }
@@ -118,11 +114,11 @@ namespace VirtualChat {
         }
 
         public void OnClientJoin(Client client) {
-            SendStr("~/AddClient " + client.Index + ' ' + client.Username + ' ' + client.MyColor.r + ' ' + client.MyColor.g + ' ' + client.MyColor.b);
+            SendStr("~/AddClient " + client.Index + ' ' + client.Username + ' ' + client.MyColor.r + ' ' + client.MyColor.g + ' ' + client.MyColor.b + ' ');
         }
 
         public void OnClientLeave(Client client) {
-            SendStr("~/RemoveClient " + client.Index);
+            SendStr("~/RemoveClient " + client.Index + ' ');
         }
 
         public void OnEnterChat() {
