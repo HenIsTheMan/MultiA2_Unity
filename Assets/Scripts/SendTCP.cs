@@ -9,7 +9,7 @@ namespace VirtualChat {
 
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
-        [SerializeField] private Text textOutput;
+        [SerializeField] private GameObject msgListItemPrefab;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace VirtualChat {
         public SendTCP() {
             client = null;
             textInputBox = null;
-            textOutput = null;
+            msgListItemPrefab = null;
         }
 
         #endregion
@@ -45,8 +45,8 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
-			UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
-            UnityEngine.Assertions.Assert.IsNotNull(textOutput);
+            UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
+            UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
         }
 
         private void Update() {
@@ -54,7 +54,14 @@ namespace VirtualChat {
             if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
                 _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
-                textOutput.text = Encoding.UTF8.GetString(bytes);
+
+                GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+
+                Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
+                textComponent.text = Encoding.UTF8.GetString(bytes);
+
+                Color myColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false);
+                textComponent.color = new Color(myColor.r, myColor.g, myColor.b, 1.0f);
             }
         }
 
