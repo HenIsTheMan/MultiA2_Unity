@@ -15,12 +15,12 @@ namespace VirtualChat {
 
         #region Properties
 
-        public string IPAddress {
+        public string DstIPAddress {
             get;
             set;
         }
 
-        public int PortNumber {
+        public int DstPortNumber {
             get;
             set;
         }
@@ -66,7 +66,7 @@ namespace VirtualChat {
         #endregion
         public bool InitClient() {
             try {
-                client = new TcpClient(IPAddress, PortNumber);
+                client = new TcpClient(DstIPAddress, DstPortNumber);
             } catch(SocketException) {
                 return false;
             }

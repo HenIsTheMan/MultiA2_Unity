@@ -82,14 +82,14 @@ namespace VirtualChat {
                 }
 
                 try {
-                    sendTCP.PortNumber = int.Parse(portNumberServerTxtBox.text);
+                    sendTCP.DstPortNumber = int.Parse(portNumberServerTxtBox.text);
                 } catch(System.Exception) {
                     loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
                     loginStatusTxt.text = "Login Failed!";
                     return;
                 }
 
-                sendTCP.IPAddress = IPAddressServerTxtBox.text;
+                sendTCP.DstIPAddress = IPAddressServerTxtBox.text;
                 if(sendTCP.InitClient()) {
                     sendTCP.Username = usernameTxtBox.text;
 
