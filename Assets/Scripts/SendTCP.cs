@@ -40,11 +40,21 @@ namespace VirtualChat {
         }
 
         private void Start() {
-            client = new TcpClient(IP, port);
+            try {
+                client = new TcpClient(IP, port);
+            } catch(SocketException) {
+                textOutput.text = "Failed to connect to a server!";
+                return;
+            }
+
             SendStr("Hello World!");
         }
 
         private void Update() {
+            if(textOutput.text == "Failed to connect to a server!") {
+                return;
+            }
+
             NetworkStream stream = client.GetStream();
             if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
@@ -54,6 +64,10 @@ namespace VirtualChat {
         }
 
         private void OnDisable() {
+            if(textOutput.text == "Failed to connect to a server!") {
+                return;
+            }
+
             client.GetStream().Close();
             client.Close();
         }
@@ -61,6 +75,10 @@ namespace VirtualChat {
         #endregion
 
         public void OnSendButtonClicked() {
+            if(textOutput.text == "Failed to connect to a server!") {
+                return;
+            }
+
             SendStr(textInputBox.text);
             textInputBox.text = string.Empty;
         }
