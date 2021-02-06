@@ -2,6 +2,7 @@
 using System.Text;
 using System.Net.Sockets;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace VirtualChat {
     internal sealed class SendTCP: MonoBehaviour {
@@ -50,16 +51,46 @@ namespace VirtualChat {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
                 _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
 
-/*                string txt = Encoding.UTF8.GetString(bytes);
-                if(txt[0] == '~' && txt[1] == '/') {
+                string rawStr = Encoding.UTF8.GetString(bytes);
+                int rawStrLen = rawStr.Length;
+                List<int> spacePosIndices = new List<int>();
+                for(int i = 0; i < rawStrLen; ++i) {
+                    if(rawStr[i] == ' ') {
+                        spacePosIndices.Add(i);
+                    }
+                }
+
+                int spacePosIndicesSize = spacePosIndices.Count;
+                List<string> txts = new List<string>();
+                for(int i = 0; i < spacePosIndicesSize; ++i) {
+                    if(i == 0) {
+                        txts.Add(rawStr.Substring(0, spacePosIndices[0]));
+                    } else if(i == spacePosIndicesSize - 1) {
+                        if(spacePosIndices[i] + 1 != rawStrLen) {
+                            txts.Add(rawStr.Substring(spacePosIndices[i] + 1, rawStrLen - 1));
+                        }
+                    } else {
+                        txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
+                    }
+                }
+
+                string txt1st = txts[0];
+                if(txts[0] == '~' && txts[1] == '/') {
+                    string commandIdentifier = txt.Substring(2);
+
+                    if(commandIdentifier == "AddClient") {
+                    } else if(commandIdentifier == "RemoveClient") {
+                    }
                 } else {
+                    /*int clientIndex = 
+
                     GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
 
                     Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
                     textComponent.text = ClientData.Username + ": " + txt;
 
-                    textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);
-                }*/
+                    textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);*/
+                }
             }
         }
 
@@ -79,11 +110,11 @@ namespace VirtualChat {
         }
 
         public void OnClientJoin(Client client) {
-            SendStr("~/AddClient " + client.Username + client.MyColor);
+            SendStr("~/AddClient " + "string " + client.Username + ' ' + "float " + client.MyColor.r + ' ' + "float " + client.MyColor.g + ' ' + "float " + client.MyColor.b + ' ');
         }
 
         public void OnClientLeave(Client client) {
-            SendStr("~/RemoveClient " + client.Username + client.MyColor);
+            SendStr("~/RemoveClient " + "string " + client.Username + ' ' + "float " + client.MyColor.r + ' ' + "float " + client.MyColor.g + ' ' + "float " + client.MyColor.b + ' ');
         }
 
         public void OnEnterChat() {
