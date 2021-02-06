@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 
 namespace VirtualChat {
-    internal sealed class ClientData: MonoBehaviour { //Static class
+    internal sealed class Client: MonoBehaviour {
         #region Fields
         #endregion
 
         #region Properties
-
-        public static Color MyColor {
+        public Color MyColor {
             get;
             set;
         }
 
-        public static string Username {
+        public string Username {
             get;
             set;
         }
@@ -21,7 +20,7 @@ namespace VirtualChat {
 
         #region Ctors and Dtor
 
-        private ClientData() {
+        public Client() {
         }
 
         #endregion

@@ -50,12 +50,16 @@ namespace VirtualChat {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
                 _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
 
-                GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+/*                string txt = Encoding.UTF8.GetString(bytes);
+                if(txt[0] == '~' && txt[1] == '/') {
+                } else {
+                    GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
 
-                Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
-                textComponent.text = ClientData.Username + ": " + Encoding.UTF8.GetString(bytes);
+                    Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
+                    textComponent.text = ClientData.Username + ": " + txt;
 
-                textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);
+                    textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);
+                }*/
             }
         }
 
@@ -72,6 +76,14 @@ namespace VirtualChat {
                 return false;
             }
             return true;
+        }
+
+        public void OnClientJoin(Client client) {
+            SendStr("~/AddClient " + client.Username + client.MyColor);
+        }
+
+        public void OnClientLeave(Client client) {
+            SendStr("~/RemoveClient " + client.Username + client.MyColor);
         }
 
         public void OnEnterChat() {
