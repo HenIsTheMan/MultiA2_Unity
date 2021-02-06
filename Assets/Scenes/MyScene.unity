@@ -128,6 +128,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1403105796701512947, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
+        type: 3}
+      propertyPath: m_Name
+      value: ChatTxtBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 1403105796909956928, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
+        type: 3}
+      propertyPath: m_Name
+      value: ChatTxt
+      objectReference: {fileID: 0}
     - target: {fileID: 1403105797502105309, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -188,10 +198,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MySceneNew
       objectReference: {fileID: 0}
-    - target: {fileID: 3222472771725999569, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
+    - target: {fileID: 1403105797724930550, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
         type: 3}
-      propertyPath: port
-      value: 8108
+      propertyPath: m_Name
+      value: ChatSendButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95, type: 3}
