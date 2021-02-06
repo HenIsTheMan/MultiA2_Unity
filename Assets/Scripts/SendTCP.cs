@@ -20,7 +20,12 @@ namespace VirtualChat {
             set;
         }
 
-        public int portNumber {
+        public int PortNumber {
+            get;
+            set;
+        }
+
+        public string Username {
             get;
             set;
         }
@@ -42,17 +47,6 @@ namespace VirtualChat {
         private void Awake() {
 			UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(textOutput);
-        }
-
-        private void Start() {
-            /*try {
-                client = new TcpClient(IPAddress, portNumber);
-            } catch(SocketException) {
-                textOutput.text = "Failed to connect to a server!";
-                return;
-            }*/
-
-            //SendStr("Hello World!");
         }
 
         private void Update() {
@@ -78,6 +72,17 @@ namespace VirtualChat {
         }
 
         #endregion
+        public bool InitClient() {
+            try {
+                client = new TcpClient(IPAddress, PortNumber);
+            } catch(SocketException) {
+                textOutput.text = "Failed to connect to a server!";
+                return false;
+            }
+
+            SendStr("Hello World!");
+            return true;
+        }
 
         public void OnSendButtonClicked() {
             if(textOutput.text == "Failed to connect to a server!") {

@@ -11,6 +11,8 @@ namespace VirtualChat {
         [SerializeField] private GameObject chatSendButton;
         [SerializeField] private GameObject chatTxt;
 
+        [SerializeField] private GameObject loginButton;
+
         [SerializeField] private SendTCP sendTCP;
 
         [SerializeField] private InputField usernameTxtBox;
@@ -33,6 +35,8 @@ namespace VirtualChat {
             chatSendButton = null;
             chatTxt = null;
 
+            loginButton = null;
+
             sendTCP = null;
 
             usernameTxtBox = null;
@@ -53,6 +57,8 @@ namespace VirtualChat {
             UnityEngine.Assertions.Assert.IsNotNull(chatSendButton);
             UnityEngine.Assertions.Assert.IsNotNull(chatTxt);
 
+            UnityEngine.Assertions.Assert.IsNotNull(loginButton);
+
             UnityEngine.Assertions.Assert.IsNotNull(sendTCP);
 
             UnityEngine.Assertions.Assert.IsNotNull(usernameTxtBox);
@@ -65,6 +71,43 @@ namespace VirtualChat {
         #endregion
 
         public void OnLoginButtonClicked() {
+            if(dropdown.options[dropdown.value].text == "TCP/IP") {
+                sendTCP.IPAddress = IPAddressServerTxtBox.text;
+
+                try {
+                    sendTCP.PortNumber = int.Parse(portNumberServerTxtBox.text);
+                } catch(System.Exception) {
+                    sendTCP.PortNumber = 0;
+                } finally {
+                    if(sendTCP.InitClient()) {
+                        sendTCP.Username = usernameTxtBox.text;
+                        sendTCP.enabled = true;
+
+                        _ = StartCoroutine(nameof(MoveToChat));
+
+                        loginStatusTxt.text = "Login Successful!";
+                    } else {
+                        loginStatusTxt.text = "Login Failed!";
+                    }
+                }
+            } else {
+                //??
+            }
         }
+
+        private System.Collections.IEnumerator MoveToChat() {
+            yield return new WaitForSeconds(4);
+
+            chatTxtBox.SetActive(true);
+            chatSendButton.SetActive(true);
+            chatTxt.SetActive(true);
+
+            dropdown.enabled = false;
+            usernameTxtBox.enabled = false;
+            IPAddressServerTxtBox.enabled = false;
+            portNumberServerTxtBox.enabled = false;
+            loginButton.SetActive(false);
+            loginStatusTxt.enabled = false;
+        } 
     }
 }
