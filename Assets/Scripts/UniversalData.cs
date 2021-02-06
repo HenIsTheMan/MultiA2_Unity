@@ -40,8 +40,8 @@ namespace VirtualChat {
             return clients.Count;
         }
 
-        public static Client GetMyClient() {
-            return clients[MyClientIndex];
+        public static Client GetClient(int index) {
+            return clients[index];
         }
     }
 }
