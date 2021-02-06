@@ -188,5 +188,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MySceneNew
       objectReference: {fileID: 0}
+    - target: {fileID: 3222472771725999569, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95,
+        type: 3}
+      propertyPath: port
+      value: 8108
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8da1c3bdb6fd10d4a98a6ef3ffa24b95, type: 3}
