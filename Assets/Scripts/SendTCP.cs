@@ -8,6 +8,7 @@ namespace VirtualChat {
     internal sealed class SendTCP: MonoBehaviour {
         #region Fields
 
+        private bool canWrite;
         private Queue<string> msgQueue;
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
@@ -32,6 +33,7 @@ namespace VirtualChat {
         #region Ctors and Dtor
 
         public SendTCP() {
+            canWrite = true;
             msgQueue = null;
             client = null;
             textInputBox = null;
@@ -47,12 +49,6 @@ namespace VirtualChat {
             UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
         }
-
-
-
-        bool canWrite = true;
-
-
 
         private void Update() {
             NetworkStream stream = client.GetStream();
