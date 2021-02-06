@@ -90,6 +90,7 @@ namespace VirtualChat {
                         Username = usernameTxtBox.text,
 						MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
 					};
+                    UniversalData.MyClientIndex = client.Index;
                     sendTCP.OnClientJoin(client);
 
                     _ = StartCoroutine(nameof(MoveToChat));

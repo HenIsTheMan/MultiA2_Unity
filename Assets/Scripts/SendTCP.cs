@@ -61,39 +61,48 @@ namespace VirtualChat {
                 }
 
                 int spacePosIndicesSize = spacePosIndices.Count;
-                List<string> txts = new List<string>();
-                for(int i = 0; i < spacePosIndicesSize; ++i) {
-                    if(i == 0) {
-                        txts.Add(rawStr.Substring(0, spacePosIndices[0]));
-                    } else {
-                        txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
+                if(spacePosIndicesSize > 0) {
+                    List<string> txts = new List<string>();
+                    for(int i = 0; i < spacePosIndicesSize; ++i) {
+                        if(i == 0) {
+                            txts.Add(rawStr.Substring(0, spacePosIndices[0]));
+                        } else {
+                            txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
+                        }
                     }
-                }
 
-                string txt1st = txts[0];
-                if(txt1st[0] == '~' && txt1st[1] == '/') {
-                    string commandIdentifier = txt1st.Substring(2);
+                    string txt1st = txts[0];
+                    if(txt1st[0] == '~' && txt1st[1] == '/') {
+                        string commandIdentifier = txt1st.Substring(2);
 
-                    if(commandIdentifier == "AddClient") {
-						Client client = new Client {
-							Index = int.Parse(txts[1]),
-							Username = txts[2],
-							MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]))
-						};
+                        if(commandIdentifier == "AddClient") {
+                            Client client = new Client {
+                                Index = int.Parse(txts[1]),
+                                Username = txts[2],
+                                MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]))
+                            };
 
-						UniversalData.AddClient(client);
-                    } else if(commandIdentifier == "RemoveClient") {
-                        UniversalData.RemoveClient(int.Parse(txts[1]));
+                            UniversalData.AddClient(client);
+                        } else if(commandIdentifier == "RemoveClient") {
+                            UniversalData.RemoveClient(int.Parse(txts[1]));
+                        }
+                    } else {
+                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+                        Client myClient = UniversalData.GetMyClient();
+
+                        Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
+                        textComponent.text = myClient.Username + ": " + rawStr;
+
+                        textComponent.color = new Color(myClient.MyColor.r, myClient.MyColor.g, myClient.MyColor.b, 1.0f);
                     }
                 } else {
-                    /*int clientIndex = 
-
                     GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+                    Client myClient = UniversalData.GetMyClient();
 
                     Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
-                    textComponent.text = ClientData.Username + ": " + txt;
+                    textComponent.text = myClient.Username + ": " + rawStr;
 
-                    textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);*/
+                    textComponent.color = new Color(myClient.MyColor.r, myClient.MyColor.g, myClient.MyColor.b, 1.0f);
                 }
             }
         }

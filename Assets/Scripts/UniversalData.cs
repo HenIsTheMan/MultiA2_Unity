@@ -10,6 +10,12 @@ namespace VirtualChat {
         #endregion
 
         #region Properties
+
+        public static int MyClientIndex {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Ctors and Dtor
@@ -32,6 +38,10 @@ namespace VirtualChat {
 
         public static int CalcAmtOfClients() {
             return clients.Count;
+        }
+
+        public static Client GetMyClient() {
+            return clients[MyClientIndex];
         }
     }
 }
