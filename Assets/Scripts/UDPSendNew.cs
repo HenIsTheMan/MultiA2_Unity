@@ -40,9 +40,7 @@ public class UDPSendNew : MonoBehaviour
     // init
     public void init()
     {
-      
-        // define
-        port = 7890;
+     
 
       
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
