@@ -50,7 +50,7 @@ namespace VirtualChat {
         }
 
         private void Update() {
-            if(client == null || textOutput.text == "Failed to connect to a server!") {
+            if(textOutput.text == "Failed to connect to a server!") {
                 return;
             }
 
@@ -63,7 +63,7 @@ namespace VirtualChat {
         }
 
         private void OnDisable() {
-            if(client == null || textOutput.text == "Failed to connect to a server!") {
+            if(textOutput.text == "Failed to connect to a server!") {
                 return;
             }
 

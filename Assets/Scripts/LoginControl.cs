@@ -85,8 +85,10 @@ namespace VirtualChat {
 
                         _ = StartCoroutine(nameof(MoveToChat));
 
+                        loginStatusTxt.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
                         loginStatusTxt.text = "Login Successful!";
                     } else {
+                        loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
                         loginStatusTxt.text = "Login Failed!";
                     }
                 }
