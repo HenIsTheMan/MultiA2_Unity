@@ -5,7 +5,7 @@ namespace VirtualChat {
     internal sealed class UniversalData: MonoBehaviour { //Static class
 		#region Fields
 
-		private static List<Client> clients = new List<Client>();
+		private static readonly List<Client> clients = new List<Client>();
 
         #endregion
 

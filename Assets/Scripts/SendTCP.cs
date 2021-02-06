@@ -68,13 +68,12 @@ namespace VirtualChat {
                         for(int i = 0; i < spacePosIndicesSize; ++i) {
                             if(i == 0) {
                                 txts.Add(rawStr.Substring(0, spacePosIndices[0]));
-                            } else if(i == spacePosIndicesSize - 1) {
-                                if(spacePosIndices[i] + 1 < rawStrLen) {
-                                    txts.Add(rawStr.Substring(spacePosIndices[i] + 1, rawStrLen - 1 - spacePosIndices[i]));
-                                }
-                                txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
                             } else {
                                 txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
+
+                                if(i == spacePosIndicesSize - 1 && spacePosIndices[i] + 1 < rawStrLen) {
+                                    txts.Add(rawStr.Substring(spacePosIndices[i] + 1, rawStrLen - 1 - spacePosIndices[i]));
+                                }
                             }
                         }
 
