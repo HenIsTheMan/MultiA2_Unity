@@ -8,24 +8,29 @@ namespace VirtualChat {
         #region Fields
 
         private TcpClient client;
-
-        [SerializeField] private string IP = "127.0.0.1"; //??
-        [SerializeField] private int port;
         [SerializeField] private InputField textInputBox;
         [SerializeField] private Text textOutput;
 
         #endregion
 
         #region Properties
+
+        public string IPAddress {
+            get;
+            set;
+        }
+
+        public int portNumber {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Ctors and Dtor
 
         public SendTCP() {
             client = null;
-
-            IP = "127.0.0.1"; //??
-            port = 0;
             textInputBox = null;
             textOutput = null;
         }
@@ -40,18 +45,18 @@ namespace VirtualChat {
         }
 
         private void Start() {
-            try {
-                client = new TcpClient(IP, port);
+            /*try {
+                client = new TcpClient(IPAddress, portNumber);
             } catch(SocketException) {
                 textOutput.text = "Failed to connect to a server!";
                 return;
-            }
+            }*/
 
-            SendStr("Hello World!");
+            //SendStr("Hello World!");
         }
 
         private void Update() {
-            if(textOutput.text == "Failed to connect to a server!") {
+            if(client == null || textOutput.text == "Failed to connect to a server!") {
                 return;
             }
 
@@ -64,7 +69,7 @@ namespace VirtualChat {
         }
 
         private void OnDisable() {
-            if(textOutput.text == "Failed to connect to a server!") {
+            if(client == null || textOutput.text == "Failed to connect to a server!") {
                 return;
             }
 
