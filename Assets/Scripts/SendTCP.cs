@@ -8,6 +8,7 @@ namespace VirtualChat {
     internal sealed class SendTCP: MonoBehaviour {
         #region Fields
 
+        private Queue<string> msgQueue;
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
         [SerializeField] private GameObject msgListItemPrefab;
@@ -31,6 +32,7 @@ namespace VirtualChat {
         #region Ctors and Dtor
 
         public SendTCP() {
+            msgQueue = null;
             client = null;
             textInputBox = null;
             msgListItemPrefab = null;
@@ -41,12 +43,26 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
+            msgQueue = new Queue<string>();
             UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
         }
 
+
+
+        bool canWrite = true;
+
+
+
         private void Update() {
             NetworkStream stream = client.GetStream();
+
+            if(canWrite && stream.CanWrite && msgQueue.Count > 0) {
+                string msg = msgQueue.Dequeue();
+                byte[] data = Encoding.UTF8.GetBytes(msg);
+                stream.Write(data, 0, data.Length);
+                canWrite = false;
+            }
 
             if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
@@ -92,13 +108,15 @@ namespace VirtualChat {
                     }
                 } else {
                     GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
-                    Client sender = UniversalData.GetClient(rawStr[0]);
+                    Client sender = UniversalData.GetClient(rawStr[0] - 48);
 
                     Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
                     textComponent.text = sender.Username + ": " + rawStr.Substring(3);
 
                     textComponent.color = new Color(sender.MyColor.r, sender.MyColor.g, sender.MyColor.b, 1.0f);
                 }
+
+                canWrite = true;
             }
         }
 
@@ -135,11 +153,7 @@ namespace VirtualChat {
         }
 
         private void SendStr(string msg) {
-            NetworkStream stream = client.GetStream();
-            if(stream.CanWrite) {
-                byte[] data = Encoding.UTF8.GetBytes(msg);
-                stream.Write(data, 0, data.Length);
-            }
+            msgQueue.Enqueue(msg);
         }
     }
 }
