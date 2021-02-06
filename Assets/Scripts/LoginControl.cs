@@ -72,24 +72,34 @@ namespace VirtualChat {
 
         public void OnLoginButtonClicked() {
             if(dropdown.options[dropdown.value].text == "TCP/IP") {
-                sendTCP.IPAddress = IPAddressServerTxtBox.text;
+                if(usernameTxtBox.text == string.Empty
+                    || IPAddressServerTxtBox.text == string.Empty
+                    || portNumberServerTxtBox.text == string.Empty
+                ) {
+                    loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                    loginStatusTxt.text = "Login Failed!";
+                    return;
+                }
 
                 try {
                     sendTCP.PortNumber = int.Parse(portNumberServerTxtBox.text);
                 } catch(System.Exception) {
-                    sendTCP.PortNumber = 0;
-                } finally {
-                    if(sendTCP.InitClient()) {
-                        sendTCP.Username = usernameTxtBox.text;
+                    loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                    loginStatusTxt.text = "Login Failed!";
+                    return;
+                }
 
-                        _ = StartCoroutine(nameof(MoveToChat));
+                sendTCP.IPAddress = IPAddressServerTxtBox.text;
+                if(sendTCP.InitClient()) {
+                    sendTCP.Username = usernameTxtBox.text;
 
-                        loginStatusTxt.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-                        loginStatusTxt.text = "Login Successful!";
-                    } else {
-                        loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-                        loginStatusTxt.text = "Login Failed!";
-                    }
+                    _ = StartCoroutine(nameof(MoveToChat));
+
+                    loginStatusTxt.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+                    loginStatusTxt.text = "Login Successful!";
+                } else {
+                    loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                    loginStatusTxt.text = "Login Failed!";
                 }
             } else {
                 //??
@@ -103,12 +113,12 @@ namespace VirtualChat {
             chatSendButton.SetActive(true);
             chatTxt.SetActive(true);
 
-            dropdown.enabled = false;
-            usernameTxtBox.enabled = false;
-            IPAddressServerTxtBox.enabled = false;
-            portNumberServerTxtBox.enabled = false;
+            dropdown.gameObject.SetActive(false);
+            usernameTxtBox.gameObject.SetActive(false);
+            IPAddressServerTxtBox.gameObject.SetActive(false);
+            portNumberServerTxtBox.gameObject.SetActive(false);
             loginButton.SetActive(false);
-            loginStatusTxt.enabled = false;
+            loginStatusTxt.gameObject.SetActive(false);
 
             sendTCP.enabled = true;
             sendTCP.OnEnterChat();
