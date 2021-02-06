@@ -25,11 +25,6 @@ namespace VirtualChat {
             set;
         }
 
-        public string Username {
-            get;
-            set;
-        }
-
         #endregion
 
         #region Ctors and Dtor
@@ -58,10 +53,9 @@ namespace VirtualChat {
                 GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
 
                 Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
-                textComponent.text = Encoding.UTF8.GetString(bytes);
+                textComponent.text = ClientData.Username + ": " + Encoding.UTF8.GetString(bytes);
 
-                Color myColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false);
-                textComponent.color = new Color(myColor.r, myColor.g, myColor.b, 1.0f);
+                textComponent.color = new Color(ClientData.MyColor.r, ClientData.MyColor.g, ClientData.MyColor.b, 1.0f);
             }
         }
 

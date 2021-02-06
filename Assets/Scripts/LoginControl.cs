@@ -85,7 +85,8 @@ namespace VirtualChat {
 
                 sendTCP.DstIPAddress = IPAddressServerTxtBox.text;
                 if(sendTCP.InitClient()) {
-                    sendTCP.Username = usernameTxtBox.text;
+                    ClientData.Username = usernameTxtBox.text;
+                    ClientData.MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false);
 
                     _ = StartCoroutine(nameof(MoveToChat));
 
