@@ -81,7 +81,6 @@ namespace VirtualChat {
                 } finally {
                     if(sendTCP.InitClient()) {
                         sendTCP.Username = usernameTxtBox.text;
-                        sendTCP.enabled = true;
 
                         _ = StartCoroutine(nameof(MoveToChat));
 
@@ -110,6 +109,9 @@ namespace VirtualChat {
             portNumberServerTxtBox.enabled = false;
             loginButton.SetActive(false);
             loginStatusTxt.enabled = false;
+
+            sendTCP.enabled = true;
+            sendTCP.OnEnterChat();
         } 
     }
 }
