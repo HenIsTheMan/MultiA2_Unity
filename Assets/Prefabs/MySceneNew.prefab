@@ -2763,26 +2763,46 @@ PrefabInstance:
     - target: {fileID: 9121769112289427814, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9121769112289427814, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9121769112289427814, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9121769112376784444, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9121769112376784444, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121769112535755009, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121769112535755009, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121769112535755009, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121769112535755009, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+        type: 3}
+      propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9121769112771742572, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
@@ -2794,6 +2814,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ChatCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121769113155655927, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9121769113155655928, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
         type: 3}
