@@ -53,7 +53,7 @@ namespace VirtualChat {
             NetworkStream stream = client.GetStream();
             if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
-                stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
+                _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
                 textOutput.text = Encoding.UTF8.GetString(bytes);
             }
         }
