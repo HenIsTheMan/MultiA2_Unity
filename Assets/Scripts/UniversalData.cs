@@ -7,8 +7,6 @@ namespace VirtualChat {
 
 		private static List<Client> clients = new List<Client>();
 
-        [SerializeField] private static SendTCP sendTCP;
-
         #endregion
 
         #region Properties
@@ -22,21 +20,18 @@ namespace VirtualChat {
         #endregion
 
         #region Unity User Callback Event Funcs
-
-        private void Awake() {
-            UnityEngine.Assertions.Assert.IsNotNull(sendTCP);
-        }
-
         #endregion
 
         public static void AddClient(Client client) {
             clients.Add(client);
-            sendTCP.OnClientJoin(client);
         }
 
-        public static void RemoveClient(Client client) {
-            clients.Remove(client);
-            sendTCP.OnClientLeave(client);
+        public static void RemoveClient(int index) {
+            clients.Remove(clients[index]);
+        }
+
+        public static int CalcAmtOfClients() {
+            return clients.Count;
         }
     }
 }

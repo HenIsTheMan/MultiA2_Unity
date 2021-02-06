@@ -6,12 +6,18 @@ namespace VirtualChat {
         #endregion
 
         #region Properties
-        public Color MyColor {
+
+        public int Index {
             get;
             set;
         }
 
         public string Username {
+            get;
+            set;
+        }
+
+        public Color MyColor {
             get;
             set;
         }

@@ -75,11 +75,19 @@ namespace VirtualChat {
                 }
 
                 string txt1st = txts[0];
-                if(txts[0] == '~' && txts[1] == '/') {
-                    string commandIdentifier = txt.Substring(2);
+                if(txt1st[0] == '~' && txt1st[1] == '/') {
+                    string commandIdentifier = txt1st.Substring(2);
 
                     if(commandIdentifier == "AddClient") {
+                        Client client = new Client();
+
+                        client.Index = int.Parse(txts[1]);
+                        client.Username = txts[2];
+                        client.MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]));
+
+                        UniversalData.AddClient(client);
                     } else if(commandIdentifier == "RemoveClient") {
+                        UniversalData.RemoveClient(int.Parse(txts[1]));
                     }
                 } else {
                     /*int clientIndex = 
@@ -110,11 +118,11 @@ namespace VirtualChat {
         }
 
         public void OnClientJoin(Client client) {
-            SendStr("~/AddClient " + "string " + client.Username + ' ' + "float " + client.MyColor.r + ' ' + "float " + client.MyColor.g + ' ' + "float " + client.MyColor.b + ' ');
+            SendStr("~/AddClient " + client.Index + ' ' + client.Username + ' ' + client.MyColor.r + ' ' + client.MyColor.g + ' ' + client.MyColor.b);
         }
 
         public void OnClientLeave(Client client) {
-            SendStr("~/RemoveClient " + "string " + client.Username + ' ' + "float " + client.MyColor.r + ' ' + "float " + client.MyColor.g + ' ' + "float " + client.MyColor.b + ' ');
+            SendStr("~/RemoveClient " + client.Index);
         }
 
         public void OnEnterChat() {

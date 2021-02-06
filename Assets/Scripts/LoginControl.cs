@@ -86,10 +86,11 @@ namespace VirtualChat {
                 sendTCP.DstIPAddress = IPAddressServerTxtBox.text;
                 if(sendTCP.InitClient()) {
 					Client client = new Client {
-						Username = usernameTxtBox.text,
+                        Index = UniversalData.CalcAmtOfClients(),
+                        Username = usernameTxtBox.text,
 						MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
 					};
-					UniversalData.AddClient(client);
+                    sendTCP.OnClientJoin(client);
 
                     _ = StartCoroutine(nameof(MoveToChat));
 
