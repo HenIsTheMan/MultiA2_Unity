@@ -160,7 +160,11 @@ namespace VirtualChat {
 
                         if(commandIdentifier == "Clear" || commandIdentifier == "clear") {
                             GameObject content = chatCanvasControlScript.IsPublicActive ? publicContent : serverContent;
-                            foreach(Transform child in content.transform){
+                            foreach(Transform child in content.transform) {
+                                Destroy(child.gameObject);
+                            }
+                        } else if(commandIdentifier == "Wipe" || commandIdentifier == "wipe") {
+                            foreach(Transform child in publicContent.transform) {
                                 Destroy(child.gameObject);
                             }
                         }
