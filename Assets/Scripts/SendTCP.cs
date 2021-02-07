@@ -8,7 +8,6 @@ namespace VirtualChat {
     internal sealed class SendTCP: MonoBehaviour {
         #region Fields
 
-        private bool isMyClientActivated;
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
         [SerializeField] private GameObject msgListItemPrefab;
@@ -37,7 +36,6 @@ namespace VirtualChat {
         #region Ctors and Dtor
 
         public SendTCP() {
-            isMyClientActivated = false;
             client = null;
             textInputBox = null;
             msgListItemPrefab = null;
@@ -105,48 +103,42 @@ namespace VirtualChat {
                         rawStr.Substring(delimiterPos[1] + 1, rawStrLen - delimiterPos[1] - 1)
                     };
 
-                    /*
-                    string commandIdentifier = txts[1].Substring(2);
+                    if(txts[1].Length == 1) {
+                        string contentTxt = txts[2];
+                        int contentTxtLen = contentTxt.Length;
+                        char contentDelimiter = ' ';
 
-                    if(commandIdentifier == "UpdateClients") {
-                        int txtsCountMinusOne = txts.Count - 1;
-                        int membersToUpdateCount = 5;
-                        string myUsername = UniversalData.GetClient(UniversalData.MyClientIndex).Username;
-                        UniversalData.ClearClients();
-
-                        for(int offset = 0; offset < txtsCountMinusOne / membersToUpdateCount; ++offset) {
-                            Client client = new Client {
-                                Index = int.Parse(txts[1 + offset]),
-                                Username = txts[2 + offset],
-                                MyColor = new Color(float.Parse(txts[3 + offset]), float.Parse(txts[4 + offset]), float.Parse(txts[5 + offset]))
-                            };
-                            UniversalData.AddClient(client);
-                        }
-
-                        int clientsSize = UniversalData.CalcAmtOfClients();
-                        for(int i = 0; i < clientsSize; ++i) {
-                            Client currClient = UniversalData.GetClient(i);
-                            if(myUsername == currClient.Username) {
-                                UniversalData.MyClientIndex = currClient.Index;
-                                break;
+                        List<int> contentDelimiterPos = new List<int>();
+                        for(int j = 0; j < contentTxtLen; ++j) {
+                            if(contentTxt[j] == contentDelimiter) {
+                                contentDelimiterPos.Add(j);
                             }
                         }
 
-                        if(!isMyClientActivated) {
-                            ActivateClient();
-                            isMyClientActivated = true;
+                        int contentDelimiterPosSize = (int)contentDelimiterPos.Count;
+                        List<string> valTxts = new List<string>();
+
+                        for(int j = 0; j < contentDelimiterPosSize; ++j) {
+                            if(j == 0) {
+                                valTxts.Add(contentTxt.Substring(0, contentDelimiterPos[0]));
+                            } else {
+                                valTxts.Add(contentTxt.Substring(contentDelimiterPos[j - 1] + 1, contentDelimiterPos[j] - (contentDelimiterPos[j - 1] + 1)));
+
+                                if(j == contentDelimiterPosSize - 1 && contentDelimiterPos[j] + 1 < rawStrLen) {
+                                    valTxts.Add(contentTxt.Substring(contentDelimiterPos[j] + 1, rawStrLen - 1 - contentDelimiterPos[j]));
+                                }
+                            }
                         }
+
+                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+
+                        Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
+                        textComponent.text = valTxts[0] + ": " + valTxts[4];
+
+                        textComponent.color = new Color(float.Parse(valTxts[1]), float.Parse(valTxts[2]), float.Parse(valTxts[3]), 1.0f);
+                    } else {
+                        //string commandIdentifier = txts[1].Substring(1);
                     }
-                    //*/
-
-                    GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
-                    //Client sender = UniversalData.GetClient(rawStr[0] - 48);
-
-                    Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
-                    //textComponent.text = sender.Username + ": " + rawStr.Substring(3);
-                    textComponent.text = "Test";
-
-                    //textComponent.color = new Color(sender.MyColor.r, sender.MyColor.g, sender.MyColor.b, 1.0f);
                 }
             }
         }
@@ -168,7 +160,7 @@ namespace VirtualChat {
         }
 
         public void OnEnterChat() {
-            SendStr(UniversalData.MyClientIndex + " / Hi! I'm new.\0");
+            SendStr(-1 + " /NewClientJoined " + SavedUsername + '\0');
         }
 
         public void OnSendButtonClicked() {
@@ -186,12 +178,12 @@ namespace VirtualChat {
 			string msg;
 			if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
 				if(textInputBox.text[textInputBox.text.Length - 1] == delimiter && textInputBox.text[textInputBox.text.Length - 2] != delimiter) {
-					msg = UniversalData.MyClientIndex + ' ' + textInputBox.text + ' ' + '\0';
+					msg = -1 + delimiter + textInputBox.text + delimiter + '\0';
 				} else {
-					msg = UniversalData.MyClientIndex + ' ' + textInputBox.text + '\0';
+					msg = -1 + delimiter + textInputBox.text + '\0';
 				}
 			} else {
-				msg = UniversalData.MyClientIndex + " / " + textInputBox.text + '\0';
+				msg = -1 + " / " + textInputBox.text + '\0';
 			}
 
 			SendStr(msg);
@@ -205,29 +197,6 @@ namespace VirtualChat {
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 stream.Write(data, 0, data.Length);
             }
-        }
-
-        private void ActivateClient() {
-            /*Client client = new Client {
-                Index = UniversalData.CalcAmtOfClients(),
-                Username = SavedUsername,
-                MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
-            };
-            UniversalData.MyClientIndex = client.Index;
-            UniversalData.AddClient(client);
-
-            string msg = "~/UpdateClients";
-            int clientsSize = UniversalData.CalcAmtOfClients();
-            for(int i = 0; i < clientsSize; ++i){
-                Client currClient = UniversalData.GetClient(i);
-                msg += ' ' + currClient.Index;
-                msg += ' ' + currClient.Username;
-                msg += ' ' + currClient.MyColor.r;
-                msg += ' ' + currClient.MyColor.g;
-                msg += ' ' + currClient.MyColor.b;
-            }
-
-            SendStr(msg);*/
         }
     }
 }
