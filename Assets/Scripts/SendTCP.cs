@@ -83,7 +83,7 @@ namespace VirtualChat {
                     }
                 }
 
-                int rawStrsSize = pureDelimiterPos.Count;
+                int rawStrsSize = rawStrs.Count;
                 for(int i = 0; i < rawStrsSize; ++i) {
                     string rawStr = rawStrs[i];
                     int rawStrLen = rawStr.Length;
