@@ -4,6 +4,8 @@ namespace VirtualChat {
     internal sealed class ChatCanvasControl: MonoBehaviour {
         #region Fields
 
+        [SerializeField] private UnreadMsgsTracker publicUnreadMsgsTracker;
+        [SerializeField] private UnreadMsgsTracker serverUnreadMsgsTracker;
         [SerializeField] private GameObject publicChatCanvas;
         [SerializeField] private GameObject serverChatCanvas;
 
@@ -22,6 +24,8 @@ namespace VirtualChat {
 
         public ChatCanvasControl() {
             IsPublicActive = true;
+            publicUnreadMsgsTracker = null;
+            serverUnreadMsgsTracker = null;
             publicChatCanvas = null;
             serverChatCanvas = null;
         }
@@ -31,6 +35,8 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
+            UnityEngine.Assertions.Assert.IsNotNull(publicUnreadMsgsTracker);
+            UnityEngine.Assertions.Assert.IsNotNull(serverUnreadMsgsTracker);
             UnityEngine.Assertions.Assert.IsNotNull(publicChatCanvas);
             UnityEngine.Assertions.Assert.IsNotNull(serverChatCanvas);
         }
@@ -49,10 +55,12 @@ namespace VirtualChat {
 
         public void OnPublicChatButtonClick() {
             IsPublicActive = true;
+            publicUnreadMsgsTracker.Qty = 0;
         }
 
         public void OnServerChatButtonClick() {
             IsPublicActive = false;
+            serverUnreadMsgsTracker.Qty = 0;
         }
     }
 }

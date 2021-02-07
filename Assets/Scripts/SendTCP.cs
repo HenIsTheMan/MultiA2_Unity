@@ -17,6 +17,9 @@ namespace VirtualChat {
         [SerializeField] private GameObject publicContent;
         [SerializeField] private GameObject serverContent;
 
+        [SerializeField] private UnreadMsgsTracker publicUnreadMsgsTracker;
+        [SerializeField] private UnreadMsgsTracker serverUnreadMsgsTracker;
+
         #endregion
 
         #region Properties
@@ -49,6 +52,9 @@ namespace VirtualChat {
             serverTextInputBox = null;
             publicContent = null;
             serverContent = null;
+
+            publicUnreadMsgsTracker = null;
+            serverUnreadMsgsTracker = null;
         }
 
         #endregion
@@ -63,6 +69,9 @@ namespace VirtualChat {
             UnityEngine.Assertions.Assert.IsNotNull(serverTextInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(publicContent);
             UnityEngine.Assertions.Assert.IsNotNull(serverContent);
+
+            UnityEngine.Assertions.Assert.IsNotNull(publicUnreadMsgsTracker);
+            UnityEngine.Assertions.Assert.IsNotNull(serverUnreadMsgsTracker);
         }
 
         private void Update() {
@@ -147,6 +156,12 @@ namespace VirtualChat {
                                     valTxts.Add(contentTxt.Substring(contentDelimiterPos[j] + 1, contentTxtLen - 1 - contentDelimiterPos[j]));
                                 }
                             }
+                        }
+
+                        if(txts[0] == "0") {
+                            ++publicUnreadMsgsTracker.Qty;
+                        } else {
+                            ++serverUnreadMsgsTracker.Qty;
                         }
 
                         GameObject msgListItemGO = Instantiate(msgListItemPrefab, txts[0] == "0" ? publicContent.transform : serverContent.transform);
