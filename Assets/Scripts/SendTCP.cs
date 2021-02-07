@@ -191,6 +191,48 @@ namespace VirtualChat {
                             }
 
                             publicUnreadMsgsTracker.Qty = 0;
+                        } else if(commandIdentifier == "datame") {
+                            string contentTxt = txts[2];
+                            int contentTxtLen = contentTxt.Length;
+                            char contentDelimiter = ' ';
+
+                            List<int> contentDelimiterPos = new List<int>();
+                            for(int j = 0, count = 0; j < contentTxtLen && count < 4; ++j) {
+                                if(contentTxt[j] == contentDelimiter) {
+                                    contentDelimiterPos.Add(j);
+                                    ++count;
+                                }
+                            }
+
+                            int contentDelimiterPosSize = contentDelimiterPos.Count;
+                            List<string> valTxts = new List<string>();
+
+                            for(int j = 0; j < contentDelimiterPosSize; ++j) {
+                                if(j == 0) {
+                                    valTxts.Add(contentTxt.Substring(0, contentDelimiterPos[0]));
+                                } else {
+                                    valTxts.Add(contentTxt.Substring(contentDelimiterPos[j - 1] + 1, contentDelimiterPos[j] - (contentDelimiterPos[j - 1] + 1)));
+
+                                    if(j == contentDelimiterPosSize - 1 && contentDelimiterPos[j] + 1 < contentTxtLen) {
+                                        valTxts.Add(contentTxt.Substring(contentDelimiterPos[j] + 1, contentTxtLen - 1 - contentDelimiterPos[j]));
+                                    }
+                                }
+                            }
+
+                            ++serverUnreadMsgsTracker.Qty;
+
+                            GameObject msgListItemGO = Instantiate(msgListItemPrefab, serverContent.transform);
+
+                            RectTransform rectTransform = (RectTransform)msgListItemGO.transform;
+                            rectTransform.sizeDelta = new Vector2(rectTransform.rect.width, rectTransform.rect.height * 2.0f);
+
+                            Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
+                            textComponent.text = "About Me\n"
+                                + "Username: " + valTxts[0] + '\n'
+                                + "Color: " + "RGB(" + valTxts[1] + ", " + valTxts[2] + ", " + valTxts[3] + ")\n"
+                                + "isAfk: " + valTxts[4];
+
+                            textComponent.color = new Color(0.0f, 0.0f, 0.0f);
                         }
                     }
                 }
