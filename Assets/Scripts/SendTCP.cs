@@ -9,7 +9,6 @@ namespace VirtualChat {
         #region Fields
 
         private bool isMyClientActivated;
-        private Queue<string> msgQueue;
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
         [SerializeField] private GameObject msgListItemPrefab;
@@ -39,7 +38,6 @@ namespace VirtualChat {
 
         public SendTCP() {
             isMyClientActivated = false;
-            msgQueue = null;
             client = null;
             textInputBox = null;
             msgListItemPrefab = null;
@@ -50,7 +48,6 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
-            msgQueue = new Queue<string>();
             UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
         }
@@ -58,90 +55,98 @@ namespace VirtualChat {
         private void Update() {
             NetworkStream stream = client.GetStream();
 
-            if(stream.CanWrite && msgQueue.Count > 0) {
-                string msg = msgQueue.Dequeue();
-                byte[] data = Encoding.UTF8.GetBytes(msg);
-                stream.Write(data, 0, data.Length);
-            }
-
             if(stream.DataAvailable) {
                 byte[] bytes = new byte[client.ReceiveBufferSize];
                 _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
 
-                string rawStr = Encoding.UTF8.GetString(bytes);
-                if(rawStr[0] == '~' && rawStr[1] == '/') {
-                    int rawStrLen = rawStr.Length;
-                    List<int> spacePosIndices = new List<int>();
-                    for(int i = 0; i < rawStrLen; ++i) {
-                        if(rawStr[i] == ' ') {
-                            spacePosIndices.Add(i);
+                string pureStr = Encoding.UTF8.GetString(bytes);
+                int pureStrLen = pureStr.Length;
+                char pureDelimiter = '\0';
+                List<int> pureDelimiterPos = new List<int>();
+
+                for(int i = 0; i < pureStrLen; ++i) {
+                    if(pureStr[i] == pureDelimiter) {
+                        pureDelimiterPos.Add(i);
+                        if(i < pureStrLen - 1 && pureStr[i + 1] == pureDelimiter) {
+                            break;
                         }
                     }
+                }
 
-                    int spacePosIndicesSize = spacePosIndices.Count;
-                    if(spacePosIndicesSize > 0) {
-                        List<string> txts = new List<string>();
-                        for(int i = 0; i < spacePosIndicesSize; ++i) {
-                            if(i == 0) {
-                                txts.Add(rawStr.Substring(0, spacePosIndices[0]));
-                            } else {
-                                txts.Add(rawStr.Substring(spacePosIndices[i - 1] + 1, spacePosIndices[i] - (spacePosIndices[i - 1] + 1)));
+                int pureDelimiterPosSize = pureDelimiterPos.Count;
+                List<string> rawStrs = new List<string>();
 
-                                if(i == spacePosIndicesSize - 1 && spacePosIndices[i] + 1 < rawStrLen) {
-                                    txts.Add(rawStr.Substring(spacePosIndices[i] + 1, rawStrLen - 1 - spacePosIndices[i]));
-                                }
-                            }
-                        }
-
-                        string commandIdentifier = txts[0].Substring(2);
-
-                        if(commandIdentifier == "UpdateClients") {
-                            int txtsCountMinusOne = txts.Count - 1;
-                            int membersToUpdateCount = 5;
-                            string myUsername = UniversalData.GetClient(UniversalData.MyClientIndex).Username;
-                            UniversalData.ClearClients();
-
-                            for(int offset = 0; offset < txtsCountMinusOne / membersToUpdateCount; ++offset) {
-                                Client client = new Client {
-                                    Index = int.Parse(txts[1 + offset]),
-                                    Username = txts[2 + offset],
-                                    MyColor = new Color(float.Parse(txts[3 + offset]), float.Parse(txts[4 + offset]), float.Parse(txts[5 + offset]))
-                                };
-                                UniversalData.AddClient(client);
-                            }
-
-                            int clientsSize = UniversalData.CalcAmtOfClients();
-                            for(int i = 0; i < clientsSize; ++i) {
-                                Client currClient = UniversalData.GetClient(i);
-                                if(myUsername == currClient.Username) {
-                                    UniversalData.MyClientIndex = currClient.Index;
-                                    break;
-                                }
-                            }
-
-                            if(!isMyClientActivated) {
-                                ActivateClient();
-                                isMyClientActivated = true;
-                            }
-                        }
+                for(int i = 0; i < pureDelimiterPosSize; ++i) {
+                    if(i == 0) {
+                        rawStrs.Add(pureStr.Substring(0, pureDelimiterPos[0]));
                     } else {
-                        string commandIdentifier = rawStr.Substring(2);
+                        int startIndex = pureDelimiterPos[i - 1] + 1;
+                        rawStrs.Add(pureStr.Substring(startIndex, pureDelimiterPos[i] - startIndex));
+                    }
+                }
 
-                        if(commandIdentifier == "UpdateClients") {
-                            if(!isMyClientActivated) {
-                                ActivateClient();
-                                isMyClientActivated = true;
-                            }
+                int rawStrsSize = pureDelimiterPos.Count;
+                for(int i = 0; i < rawStrsSize; ++i) {
+                    string rawStr = rawStrs[i];
+                    int rawStrLen = rawStr.Length;
+                    char delimiter = ' ';
+
+                    List<int> delimiterPos = new List<int>();
+                    for(int j = 0, count = 0; j < rawStrLen && count <= 2; ++j) {
+                        if(rawStr[j] == delimiter) {
+                            delimiterPos.Add(j);
+                            ++count;
                         }
                     }
-                } else {
+
+                    List<string> txts = new List<string> {
+                        rawStr.Substring(0, delimiterPos[0]),
+                        rawStr.Substring(delimiterPos[0] + 1, delimiterPos[1] - (delimiterPos[0] + 1)),
+                        rawStr.Substring(delimiterPos[1] + 1, rawStrLen - delimiterPos[1] - 1)
+                    };
+
+                    /*
+                    string commandIdentifier = txts[1].Substring(2);
+
+                    if(commandIdentifier == "UpdateClients") {
+                        int txtsCountMinusOne = txts.Count - 1;
+                        int membersToUpdateCount = 5;
+                        string myUsername = UniversalData.GetClient(UniversalData.MyClientIndex).Username;
+                        UniversalData.ClearClients();
+
+                        for(int offset = 0; offset < txtsCountMinusOne / membersToUpdateCount; ++offset) {
+                            Client client = new Client {
+                                Index = int.Parse(txts[1 + offset]),
+                                Username = txts[2 + offset],
+                                MyColor = new Color(float.Parse(txts[3 + offset]), float.Parse(txts[4 + offset]), float.Parse(txts[5 + offset]))
+                            };
+                            UniversalData.AddClient(client);
+                        }
+
+                        int clientsSize = UniversalData.CalcAmtOfClients();
+                        for(int i = 0; i < clientsSize; ++i) {
+                            Client currClient = UniversalData.GetClient(i);
+                            if(myUsername == currClient.Username) {
+                                UniversalData.MyClientIndex = currClient.Index;
+                                break;
+                            }
+                        }
+
+                        if(!isMyClientActivated) {
+                            ActivateClient();
+                            isMyClientActivated = true;
+                        }
+                    }
+                    //*/
+
                     GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
-                    Client sender = UniversalData.GetClient(rawStr[0] - 48);
+                    //Client sender = UniversalData.GetClient(rawStr[0] - 48);
 
                     Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
-                    textComponent.text = sender.Username + ": " + rawStr.Substring(3);
+                    //textComponent.text = sender.Username + ": " + rawStr.Substring(3);
+                    textComponent.text = "Test";
 
-                    textComponent.color = new Color(sender.MyColor.r, sender.MyColor.g, sender.MyColor.b, 1.0f);
+                    //textComponent.color = new Color(sender.MyColor.r, sender.MyColor.g, sender.MyColor.b, 1.0f);
                 }
             }
         }
@@ -163,20 +168,47 @@ namespace VirtualChat {
         }
 
         public void OnEnterChat() {
-            SendStr(UniversalData.MyClientIndex + "/ Welcome!");
+            SendStr(UniversalData.MyClientIndex + " / Hi! I'm new.\0");
         }
 
         public void OnSendButtonClicked() {
-            SendStr(UniversalData.MyClientIndex + "/ " + textInputBox.text);
+			int textLen = textInputBox.text.Length;
+			char delimiter = ' ';
+
+            int delimiterPos1st = -1;
+            for(int i = 0; i < textLen; ++i) {
+                if(textInputBox.text[i] == delimiter) {
+                    delimiterPos1st = i;
+                    break;
+                }
+            }
+
+			string msg;
+			if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
+				if(textInputBox.text[textInputBox.text.Length - 1] == delimiter && textInputBox.text[textInputBox.text.Length - 2] != delimiter) {
+					msg = UniversalData.MyClientIndex + ' ' + textInputBox.text + ' ' + '\0';
+				} else {
+					msg = UniversalData.MyClientIndex + ' ' + textInputBox.text + '\0';
+				}
+			} else {
+				msg = UniversalData.MyClientIndex + " / " + textInputBox.text + '\0';
+			}
+
+			SendStr(msg);
             textInputBox.text = string.Empty;
         }
 
         private void SendStr(string msg) {
-            msgQueue.Enqueue(msg);
+            NetworkStream stream = client.GetStream();
+
+            if(stream.CanWrite) {
+                byte[] data = Encoding.UTF8.GetBytes(msg);
+                stream.Write(data, 0, data.Length);
+            }
         }
 
         private void ActivateClient() {
-            Client client = new Client {
+            /*Client client = new Client {
                 Index = UniversalData.CalcAmtOfClients(),
                 Username = SavedUsername,
                 MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
@@ -195,7 +227,7 @@ namespace VirtualChat {
                 msg += ' ' + currClient.MyColor.b;
             }
 
-            SendStr(msg);
+            SendStr(msg);*/
         }
     }
 }
