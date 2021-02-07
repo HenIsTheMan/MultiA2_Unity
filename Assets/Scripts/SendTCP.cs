@@ -8,6 +8,7 @@ namespace VirtualChat {
     internal sealed class SendTCP: MonoBehaviour {
         #region Fields
 
+        private bool isMyClientActivated;
         private bool canWrite;
         private Queue<string> msgQueue;
         private TcpClient client;
@@ -19,12 +20,17 @@ namespace VirtualChat {
         #region Properties
 
         public string DstIPAddress {
-            get;
+            private get;
             set;
         }
 
         public int DstPortNumber {
-            get;
+            private get;
+            set;
+        }
+
+        public string SavedUsername {
+            private get;
             set;
         }
 
@@ -33,6 +39,7 @@ namespace VirtualChat {
         #region Ctors and Dtor
 
         public SendTCP() {
+            isMyClientActivated = false;
             canWrite = true;
             msgQueue = null;
             client = null;
@@ -90,16 +97,24 @@ namespace VirtualChat {
                         }
 
                         string commandIdentifier = txts[0].Substring(2);
-                        if(commandIdentifier == "AddClient") {
-                            Client client = new Client {
-                                Index = int.Parse(txts[1]),
-                                Username = txts[2],
-                                MyColor = new Color(float.Parse(txts[3]), float.Parse(txts[4]), float.Parse(txts[5]))
-                            };
+                    } else {
+                        string commandIdentifier = rawStr.Substring(2);
+                        if(commandIdentifier == "UpdateClients") {
+                            //...??
 
-                            UniversalData.AddClient(client);
-                        } else if(commandIdentifier == "RemoveClient") {
-                            UniversalData.RemoveClient(int.Parse(txts[1]));
+                            if(!isMyClientActivated) {
+                                Client client = new Client {
+                                    Index = UniversalData.CalcAmtOfClients(),
+                                    Username = SavedUsername,
+                                    MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
+                                };
+                                UniversalData.MyClientIndex = client.Index;
+                                UniversalData.AddClient(client);
+
+                                //SendUpdateClients??
+
+                                isMyClientActivated = true;
+                            }
                         }
                     }
                 } else {
@@ -129,14 +144,6 @@ namespace VirtualChat {
                 return false;
             }
             return true;
-        }
-
-        public void OnClientJoin(Client client) {
-            SendStr("~/AddClient " + client.Index + ' ' + client.Username + ' ' + client.MyColor.r + ' ' + client.MyColor.g + ' ' + client.MyColor.b);
-        }
-
-        public void OnClientLeave(Client client) {
-            SendStr("~/RemoveClient " + client.Index);
         }
 
         public void OnEnterChat() {
