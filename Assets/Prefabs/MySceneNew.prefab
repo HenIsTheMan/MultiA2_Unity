@@ -1451,9 +1451,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b787359dca12a544ab1b3701535acea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textInputBox: {fileID: 7542595841419797869}
   msgListItemPrefab: {fileID: 3725420654929762534, guid: 938b1e3940f6d764b8b97bdb941ec5ce,
     type: 3}
+  chatCanvasControlScript: {fileID: 5615189006214511927}
+  publicTextInputBox: {fileID: 8023266739313684672}
+  serverTextInputBox: {fileID: 7542595841419797869}
   publicContent: {fileID: 1755847344250016851}
   serverContent: {fileID: 2281906335513575934}
 --- !u!1 &1403105797049445397
@@ -3515,6 +3517,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79d3140a8fde5b34c9d3c872cf55fbf8, type: 3}
+--- !u!224 &2281906335901946477 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 9121769113155655928, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7007034862211418773}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2281906335901946466 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9121769113155655927, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
@@ -3539,12 +3547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2281906335901946477 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 9121769113155655928, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7007034862211418773}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7406465865198477112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3745,6 +3747,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7406465865198477112}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8023266739313684672 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 689424446058508280, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7406465865198477112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1755847344906291136 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9121769113155655928, guid: 79d3140a8fde5b34c9d3c872cf55fbf8,

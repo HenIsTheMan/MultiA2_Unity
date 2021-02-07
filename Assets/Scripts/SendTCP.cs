@@ -9,9 +9,11 @@ namespace VirtualChat {
         #region Fields
 
         private TcpClient client;
-        [SerializeField] private InputField textInputBox;
         [SerializeField] private GameObject msgListItemPrefab;
 
+        [SerializeField] private ChatCanvasControl chatCanvasControlScript;
+        [SerializeField] private InputField publicTextInputBox;
+        [SerializeField] private InputField serverTextInputBox;
         [SerializeField] private GameObject publicContent;
         [SerializeField] private GameObject serverContent;
 
@@ -40,9 +42,11 @@ namespace VirtualChat {
 
         public SendTCP() {
             client = null;
-            textInputBox = null;
             msgListItemPrefab = null;
 
+            chatCanvasControlScript = null;
+            publicTextInputBox = null;
+            serverTextInputBox = null;
             publicContent = null;
             serverContent = null;
         }
@@ -52,9 +56,11 @@ namespace VirtualChat {
         #region Unity User Callback Event Funcs
 
         private void Awake() {
-            UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
 
+            UnityEngine.Assertions.Assert.IsNotNull(chatCanvasControlScript);
+            UnityEngine.Assertions.Assert.IsNotNull(publicTextInputBox);
+            UnityEngine.Assertions.Assert.IsNotNull(serverTextInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(publicContent);
             UnityEngine.Assertions.Assert.IsNotNull(serverContent);
         }
@@ -176,7 +182,9 @@ namespace VirtualChat {
         }
 
         public void OnSendButtonClicked() {
-			int textLen = textInputBox.text.Length;
+            InputField textInputBox = chatCanvasControlScript.IsPublicActive ? publicTextInputBox : serverTextInputBox;
+
+            int textLen = textInputBox.text.Length;
 			char delimiter = ' ';
 
             int delimiterPos1st = -1;
