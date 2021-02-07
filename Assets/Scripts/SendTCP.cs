@@ -12,6 +12,9 @@ namespace VirtualChat {
         [SerializeField] private InputField textInputBox;
         [SerializeField] private GameObject msgListItemPrefab;
 
+        [SerializeField] private GameObject publicContent;
+        [SerializeField] private GameObject serverContent;
+
         #endregion
 
         #region Properties
@@ -39,6 +42,9 @@ namespace VirtualChat {
             client = null;
             textInputBox = null;
             msgListItemPrefab = null;
+
+            publicContent = null;
+            serverContent = null;
         }
 
         #endregion
@@ -48,6 +54,9 @@ namespace VirtualChat {
         private void Awake() {
             UnityEngine.Assertions.Assert.IsNotNull(textInputBox);
             UnityEngine.Assertions.Assert.IsNotNull(msgListItemPrefab);
+
+            UnityEngine.Assertions.Assert.IsNotNull(publicContent);
+            UnityEngine.Assertions.Assert.IsNotNull(serverContent);
         }
 
         private void Update() {
@@ -133,7 +142,7 @@ namespace VirtualChat {
                             }
                         }
 
-                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, GameObject.Find("Content").transform);
+                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, publicContent.transform);
 
                         Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
                         textComponent.text = valTxts[0] + ": " + valTxts[4];

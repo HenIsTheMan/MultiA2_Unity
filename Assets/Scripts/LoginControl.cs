@@ -7,7 +7,7 @@ namespace VirtualChat {
 
         [SerializeField] private Dropdown dropdown;
 
-        [SerializeField] private GameObject chatCanvas;
+        [SerializeField] private GameObject chatCanvasControl;
 
         [SerializeField] private GameObject loginButton;
 
@@ -29,7 +29,7 @@ namespace VirtualChat {
         public LoginControl() {
             dropdown = null;
 
-            chatCanvas = null;
+            chatCanvasControl = null;
 
             loginButton = null;
 
@@ -49,7 +49,7 @@ namespace VirtualChat {
         private void Awake() {
             UnityEngine.Assertions.Assert.IsNotNull(dropdown);
 
-            UnityEngine.Assertions.Assert.IsNotNull(chatCanvas);
+            UnityEngine.Assertions.Assert.IsNotNull(chatCanvasControl);
 
             UnityEngine.Assertions.Assert.IsNotNull(loginButton);
 
@@ -103,7 +103,7 @@ namespace VirtualChat {
         private System.Collections.IEnumerator MoveToChat() {
             yield return new WaitForSeconds(4);
 
-            chatCanvas.SetActive(true);
+            chatCanvasControl.SetActive(true);
 
             dropdown.gameObject.SetActive(false);
             usernameTxtBox.gameObject.SetActive(false);
