@@ -172,8 +172,9 @@ namespace VirtualChat {
                         textComponent.color = new Color(float.Parse(valTxts[1]), float.Parse(valTxts[2]), float.Parse(valTxts[3]), 1.0f);
                     } else {
                         string commandIdentifier = txts[1].Substring(1);
+                        commandIdentifier = commandIdentifier.ToLower();
 
-                        if(commandIdentifier == "Clear" || commandIdentifier == "clear") {
+                        if(commandIdentifier == "clear") {
                             GameObject content = chatCanvasControlScript.IsPublicActive ? publicContent : serverContent;
                             foreach(Transform child in content.transform) {
                                 Destroy(child.gameObject);
@@ -184,7 +185,7 @@ namespace VirtualChat {
                             } else {
                                 serverUnreadMsgsTracker.Qty = 0;
                             }
-                        } else if(commandIdentifier == "Wipe" || commandIdentifier == "wipe") {
+                        } else if(commandIdentifier == "wipe") {
                             foreach(Transform child in publicContent.transform) {
                                 Destroy(child.gameObject);
                             }
