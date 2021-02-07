@@ -178,10 +178,18 @@ namespace VirtualChat {
                             foreach(Transform child in content.transform) {
                                 Destroy(child.gameObject);
                             }
+
+                            if(chatCanvasControlScript.IsPublicActive) {
+                                publicUnreadMsgsTracker.Qty = 0;
+                            } else {
+                                serverUnreadMsgsTracker.Qty = 0;
+                            }
                         } else if(commandIdentifier == "Wipe" || commandIdentifier == "wipe") {
                             foreach(Transform child in publicContent.transform) {
                                 Destroy(child.gameObject);
                             }
+
+                            publicUnreadMsgsTracker.Qty = 0;
                         }
                     }
                 }

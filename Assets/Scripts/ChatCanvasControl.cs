@@ -45,9 +45,11 @@ namespace VirtualChat {
             if(IsPublicActive) {
                 publicChatCanvas.SetActive(true);
                 serverChatCanvas.SetActive(false);
+                publicUnreadMsgsTracker.Qty = 0;
             } else {
                 serverChatCanvas.SetActive(true);
                 publicChatCanvas.SetActive(false);
+                serverUnreadMsgsTracker.Qty = 0;
             }
         }
 
@@ -55,12 +57,10 @@ namespace VirtualChat {
 
         public void OnPublicChatButtonClick() {
             IsPublicActive = true;
-            publicUnreadMsgsTracker.Qty = 0;
         }
 
         public void OnServerChatButtonClick() {
             IsPublicActive = false;
-            serverUnreadMsgsTracker.Qty = 0;
         }
     }
 }
