@@ -156,7 +156,14 @@ namespace VirtualChat {
 
                         textComponent.color = new Color(float.Parse(valTxts[1]), float.Parse(valTxts[2]), float.Parse(valTxts[3]), 1.0f);
                     } else {
-                        //string commandIdentifier = txts[1].Substring(1);
+                        string commandIdentifier = txts[1].Substring(1);
+
+                        if(commandIdentifier == "Clear" || commandIdentifier == "clear") {
+                            GameObject content = chatCanvasControlScript.IsPublicActive ? publicContent : serverContent;
+                            foreach(Transform child in content.transform){
+                                Destroy(child.gameObject);
+                            }
+                        }
                     }
                 }
             }
@@ -184,6 +191,9 @@ namespace VirtualChat {
 
         public void OnSendButtonClicked() {
             InputField textInputBox = chatCanvasControlScript.IsPublicActive ? publicTextInputBox : serverTextInputBox;
+            if(textInputBox.text == string.Empty) {
+                return;
+            }
 
             int textLen = textInputBox.text.Length;
 			char delimiter = ' ';
@@ -197,7 +207,7 @@ namespace VirtualChat {
             }
 
 			string msg;
-            char my1stChar = chatCanvasControlScript.IsPublicActive ? '0' : '1';
+            string prefix = chatCanvasControlScript.IsPublicActive ? "0" : "1";
 
             if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
                 string inputTxt = textInputBox.text;
@@ -214,12 +224,12 @@ namespace VirtualChat {
                 }
 
                 if(count == 0) {
-                    msg = my1stChar + delimiter + inputTxt + delimiter + delimiter;
+                    msg = prefix + delimiter + inputTxt + delimiter + delimiter;
                 } else {
-                    msg = my1stChar + delimiter + inputTxt;
+                    msg = prefix + delimiter + inputTxt;
                 }
 			} else {
-				msg = my1stChar + " / " + textInputBox.text;
+				msg = prefix + " / " + textInputBox.text;
 			}
 
 			SendStr(msg);
