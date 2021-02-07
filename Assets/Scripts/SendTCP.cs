@@ -101,6 +101,7 @@ namespace VirtualChat {
                         if(commandIdentifier == "UpdateClients") {
                             int txtsCountMinusOne = txts.Count - 1;
                             int membersToUpdateCount = 5;
+                            string myUsername = UniversalData.GetClient(UniversalData.MyClientIndex).Username;
                             UniversalData.ClearClients();
 
                             for(int offset = 0; offset < txtsCountMinusOne / membersToUpdateCount; ++offset) {
@@ -110,6 +111,15 @@ namespace VirtualChat {
                                     MyColor = new Color(float.Parse(txts[3 + offset]), float.Parse(txts[4 + offset]), float.Parse(txts[5 + offset]))
                                 };
                                 UniversalData.AddClient(client);
+                            }
+
+                            int clientsSize = UniversalData.CalcAmtOfClients();
+                            for(int i = 0; i < clientsSize; ++i) {
+                                Client currClient = UniversalData.GetClient(i);
+                                if(myUsername == currClient.Username) {
+                                    UniversalData.MyClientIndex = currClient.Index;
+                                    break;
+                                }
                             }
 
                             if(!isMyClientActivated) {
@@ -179,15 +189,15 @@ namespace VirtualChat {
             UniversalData.MyClientIndex = client.Index;
             UniversalData.AddClient(client);
 
-            string msg = "~/UpdateClients ";
+            string msg = "~/UpdateClients";
             int clientsSize = UniversalData.CalcAmtOfClients();
             for(int i = 0; i < clientsSize; ++i){
                 Client currClient = UniversalData.GetClient(i);
-                msg += currClient.Index + ' ';
-                msg += currClient.Username + ' ';
-                msg += currClient.MyColor.r + ' ';
-                msg += currClient.MyColor.g + ' ';
-                msg += currClient.MyColor.b + ' ';
+                msg += ' ' + currClient.Index;
+                msg += ' ' + currClient.Username;
+                msg += ' ' + currClient.MyColor.r;
+                msg += ' ' + currClient.MyColor.g;
+                msg += ' ' + currClient.MyColor.b;
             }
 
             SendStr(msg);
