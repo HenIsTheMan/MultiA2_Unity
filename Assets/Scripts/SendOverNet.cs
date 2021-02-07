@@ -8,7 +8,7 @@ namespace VirtualChat {
     internal sealed class SendOverNet: MonoBehaviour {
         #region Fields
 
-        private TcpClient client;
+        private TcpClient clientTCP;
         [SerializeField] private GameObject msgListItemPrefab;
 
         [SerializeField] private ChatCanvasControl chatCanvasControlScript;
@@ -23,6 +23,11 @@ namespace VirtualChat {
         #endregion
 
         #region Properties
+
+        public string Protocol {
+            private get;
+            set;
+        }
 
         public string DstIPAddress {
             private get;
@@ -44,7 +49,7 @@ namespace VirtualChat {
         #region Ctors and Dtor
 
         public SendOverNet() {
-            client = null;
+            clientTCP = null;
             msgListItemPrefab = null;
 
             chatCanvasControlScript = null;
@@ -75,11 +80,11 @@ namespace VirtualChat {
         }
 
         private void Update() {
-            NetworkStream stream = client.GetStream();
+            NetworkStream stream = clientTCP.GetStream();
 
             if(stream.DataAvailable) {
-                byte[] bytes = new byte[client.ReceiveBufferSize];
-                _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
+                byte[] bytes = new byte[clientTCP.ReceiveBufferSize];
+                _ = stream.Read(bytes, 0, clientTCP.ReceiveBufferSize); //Returns 0 - clientTCP.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
 
                 string pureStr = Encoding.UTF8.GetString(bytes);
 
@@ -285,15 +290,15 @@ namespace VirtualChat {
         }
 
         private void OnDisable() {
-            client.GetStream().Close();
-            client.Close();
+            clientTCP.GetStream().Close();
+            clientTCP.Close();
         }
 
         #endregion
 
         public bool InitClient() {
             try {
-                client = new TcpClient(DstIPAddress, DstPortNumber);
+                clientTCP = new TcpClient(DstIPAddress, DstPortNumber);
             } catch(SocketException) {
                 return false;
             }
@@ -354,7 +359,7 @@ namespace VirtualChat {
         private void SendStr(string msg) {
             Debug.Log("[SENT] " + msg);
 
-            NetworkStream stream = client.GetStream();
+            NetworkStream stream = clientTCP.GetStream();
 
             if(stream.CanWrite) {
                 byte[] data = Encoding.UTF8.GetBytes(msg);
