@@ -124,8 +124,8 @@ namespace VirtualChat {
                             } else {
                                 valTxts.Add(contentTxt.Substring(contentDelimiterPos[j - 1] + 1, contentDelimiterPos[j] - (contentDelimiterPos[j - 1] + 1)));
 
-                                if(j == contentDelimiterPosSize - 1 && contentDelimiterPos[j] + 1 < rawStrLen) {
-                                    valTxts.Add(contentTxt.Substring(contentDelimiterPos[j] + 1, rawStrLen - 1 - contentDelimiterPos[j]));
+                                if(j == contentDelimiterPosSize - 1 && contentDelimiterPos[j] + 1 < contentTxtLen) {
+                                    valTxts.Add(contentTxt.Substring(contentDelimiterPos[j] + 1, contentTxtLen - 1 - contentDelimiterPos[j]));
                                 }
                             }
                         }
@@ -160,7 +160,7 @@ namespace VirtualChat {
         }
 
         public void OnEnterChat() {
-            SendStr(-1 + " /NewClientJoined " + SavedUsername + '\0');
+            SendStr(-1 + " /NewClientJoined " + SavedUsername);
         }
 
         public void OnSendButtonClicked() {
@@ -178,12 +178,12 @@ namespace VirtualChat {
 			string msg;
 			if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
 				if(textInputBox.text[textInputBox.text.Length - 1] == delimiter && textInputBox.text[textInputBox.text.Length - 2] != delimiter) {
-					msg = -1 + delimiter + textInputBox.text + delimiter + '\0';
+					msg = -1 + delimiter + textInputBox.text + delimiter;
 				} else {
-					msg = -1 + delimiter + textInputBox.text + '\0';
+					msg = -1 + delimiter + textInputBox.text;
 				}
 			} else {
-				msg = -1 + " / " + textInputBox.text + '\0';
+				msg = -1 + " / " + textInputBox.text;
 			}
 
 			SendStr(msg);
