@@ -148,7 +148,7 @@ namespace VirtualChat {
                             }
                         }
 
-                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, publicContent.transform);
+                        GameObject msgListItemGO = Instantiate(msgListItemPrefab, txts[0] == "0" ? publicContent.transform : serverContent.transform);
 
                         Text textComponent = msgListItemGO.transform.Find("Text").GetComponent<Text>();
                         textComponent.text = valTxts[0] + ": " + valTxts[4];
@@ -187,7 +187,7 @@ namespace VirtualChat {
             int textLen = textInputBox.text.Length;
 			char delimiter = ' ';
 
-            int delimiterPos1st = -1;
+            int delimiterPos1st = -999;
             for(int i = 0; i < textLen; ++i) {
                 if(textInputBox.text[i] == delimiter) {
                     delimiterPos1st = i;
@@ -196,14 +196,29 @@ namespace VirtualChat {
             }
 
 			string msg;
-			if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
-				if(textInputBox.text[textInputBox.text.Length - 1] == delimiter && textInputBox.text[textInputBox.text.Length - 2] != delimiter) {
-					msg = -1 + delimiter + textInputBox.text + delimiter;
-				} else {
-					msg = -1 + delimiter + textInputBox.text;
-				}
+            char my1stChar = chatCanvasControlScript.IsPublicActive ? '0' : '1';
+
+            if(textInputBox.text[0] == '/' && delimiterPos1st != 1) {
+                string inputTxt = textInputBox.text;
+                while(inputTxt.EndsWith(" ")) {
+                    inputTxt = inputTxt.Substring(0, inputTxt.Length - 1);
+                }
+
+                int count = 0;
+                int inputTxtLen = inputTxt.Length;
+                for(int i = 0; i < inputTxtLen; ++i) {
+                    if(inputTxt[i] == ' ') {
+                         ++count;
+                    }
+                }
+
+                if(count == 0) {
+                    msg = my1stChar + delimiter + inputTxt + delimiter + delimiter;
+                } else {
+                    msg = my1stChar + delimiter + inputTxt;
+                }
 			} else {
-				msg = -1 + " / " + textInputBox.text;
+				msg = my1stChar + " / " + textInputBox.text;
 			}
 
 			SendStr(msg);
