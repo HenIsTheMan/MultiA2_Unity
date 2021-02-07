@@ -108,7 +108,7 @@ namespace VirtualChat {
                     char delimiter = ' ';
 
                     List<int> delimiterPos = new List<int>();
-                    for(int j = 0, count = 0; j < rawStrLen && count <= 2; ++j) {
+                    for(int j = 0, count = 0; j < rawStrLen && count < 2; ++j) {
                         if(rawStr[j] == delimiter) {
                             delimiterPos.Add(j);
                             ++count;
@@ -127,13 +127,14 @@ namespace VirtualChat {
                         char contentDelimiter = ' ';
 
                         List<int> contentDelimiterPos = new List<int>();
-                        for(int j = 0; j < contentTxtLen; ++j) {
+                        for(int j = 0, count = 0; j < contentTxtLen && count < 4; ++j) {
                             if(contentTxt[j] == contentDelimiter) {
                                 contentDelimiterPos.Add(j);
+                                ++count;
                             }
                         }
 
-                        int contentDelimiterPosSize = (int)contentDelimiterPos.Count;
+                        int contentDelimiterPosSize = contentDelimiterPos.Count;
                         List<string> valTxts = new List<string>();
 
                         for(int j = 0; j < contentDelimiterPosSize; ++j) {
