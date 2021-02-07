@@ -5,7 +5,7 @@ namespace Impasta {
         private string myLog = "";
         private string filename = "";
         private bool doShow = false;
-        private int kChars = 700;
+        private readonly int kChars = 700;
 
         private void OnEnable() {
             Application.logMessageReceived += Log;
@@ -21,13 +21,11 @@ namespace Impasta {
         }
 
         public void Log(string logStr, string stackTrace, LogType type) {
-            // for onscreen...
             myLog += logStr + '\n';
             if(myLog.Length > kChars) {
                 myLog = myLog.Substring(myLog.Length - kChars);
             }
 
-            // for the file ...
             if(filename == "") {
                 string d = System.Environment.GetFolderPath(
                    System.Environment.SpecialFolder.Desktop) + "/YOUR_LOGS";

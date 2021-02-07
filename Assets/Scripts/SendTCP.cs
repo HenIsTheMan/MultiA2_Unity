@@ -58,6 +58,9 @@ namespace VirtualChat {
                 _ = stream.Read(bytes, 0, client.ReceiveBufferSize); //Returns 0 - client.ReceiveBufferSize //Blocks calling thread of execution until at least 1 byte is read
 
                 string pureStr = Encoding.UTF8.GetString(bytes);
+
+                Debug.Log("[RECEIVED] " + pureStr);
+
                 int pureStrLen = pureStr.Length;
                 char pureDelimiter = '\0';
                 List<int> pureDelimiterPos = new List<int>();
@@ -191,6 +194,8 @@ namespace VirtualChat {
         }
 
         private void SendStr(string msg) {
+            Debug.Log("[SENT] " + msg);
+
             NetworkStream stream = client.GetStream();
 
             if(stream.CanWrite) {
