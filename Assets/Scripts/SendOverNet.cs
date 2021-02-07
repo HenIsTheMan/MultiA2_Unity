@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace VirtualChat {
-    internal sealed class SendTCP: MonoBehaviour {
+    internal sealed class SendOverNet: MonoBehaviour {
         #region Fields
 
         private TcpClient client;
@@ -43,7 +43,7 @@ namespace VirtualChat {
 
         #region Ctors and Dtor
 
-        public SendTCP() {
+        public SendOverNet() {
             client = null;
             msgListItemPrefab = null;
 

@@ -1671,7 +1671,7 @@ MonoBehaviour:
   dropdown: {fileID: 4554837582077396983}
   chatCanvasControl: {fileID: 3522537840354688561}
   loginButton: {fileID: 801163649}
-  sendTCP: {fileID: 3222472771725999569}
+  SendOverNet: {fileID: 3222472771725999569}
   usernameTxtBox: {fileID: 1234326226}
   IPAddressServerTxtBox: {fileID: 138725896}
   portNumberServerTxtBox: {fileID: 1369559874}

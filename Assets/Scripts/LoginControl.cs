@@ -11,7 +11,7 @@ namespace VirtualChat {
 
         [SerializeField] private GameObject loginButton;
 
-        [SerializeField] private SendTCP sendTCP;
+        [SerializeField] private SendOverNet SendOverNet;
 
         [SerializeField] private InputField usernameTxtBox;
         [SerializeField] private InputField IPAddressServerTxtBox;
@@ -33,7 +33,7 @@ namespace VirtualChat {
 
             loginButton = null;
 
-            sendTCP = null;
+            SendOverNet = null;
 
             usernameTxtBox = null;
             IPAddressServerTxtBox = null;
@@ -53,7 +53,7 @@ namespace VirtualChat {
 
             UnityEngine.Assertions.Assert.IsNotNull(loginButton);
 
-            UnityEngine.Assertions.Assert.IsNotNull(sendTCP);
+            UnityEngine.Assertions.Assert.IsNotNull(SendOverNet);
 
             UnityEngine.Assertions.Assert.IsNotNull(usernameTxtBox);
             UnityEngine.Assertions.Assert.IsNotNull(IPAddressServerTxtBox);
@@ -76,16 +76,16 @@ namespace VirtualChat {
                 }
 
                 try {
-                    sendTCP.DstPortNumber = int.Parse(portNumberServerTxtBox.text);
+                    SendOverNet.DstPortNumber = int.Parse(portNumberServerTxtBox.text);
                 } catch(System.Exception) {
                     loginStatusTxt.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
                     loginStatusTxt.text = "Login Failed!";
                     return;
                 }
 
-                sendTCP.DstIPAddress = IPAddressServerTxtBox.text;
-                if(sendTCP.InitClient()) {
-                    sendTCP.SavedUsername = usernameTxtBox.text;
+                SendOverNet.DstIPAddress = IPAddressServerTxtBox.text;
+                if(SendOverNet.InitClient()) {
+                    SendOverNet.SavedUsername = usernameTxtBox.text;
 
                     _ = StartCoroutine(nameof(MoveToChat));
 
@@ -112,8 +112,8 @@ namespace VirtualChat {
             loginButton.SetActive(false);
             loginStatusTxt.gameObject.SetActive(false);
 
-            sendTCP.enabled = true;
-            sendTCP.OnEnterChat();
+            SendOverNet.enabled = true;
+            SendOverNet.OnEnterChat();
         }
     }
 }

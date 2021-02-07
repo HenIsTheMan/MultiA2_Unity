@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using UnityEngine.UI;
-using System.Threading;
 
 public class UDPSendNew : MonoBehaviour
 {
