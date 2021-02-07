@@ -9,7 +9,6 @@ namespace VirtualChat {
         #region Fields
 
         private bool isMyClientActivated;
-        private bool canWrite;
         private Queue<string> msgQueue;
         private TcpClient client;
         [SerializeField] private InputField textInputBox;
@@ -40,7 +39,6 @@ namespace VirtualChat {
 
         public SendTCP() {
             isMyClientActivated = false;
-            canWrite = true;
             msgQueue = null;
             client = null;
             textInputBox = null;
@@ -60,11 +58,10 @@ namespace VirtualChat {
         private void Update() {
             NetworkStream stream = client.GetStream();
 
-            if(canWrite && stream.CanWrite && msgQueue.Count > 0) {
+            if(stream.CanWrite && msgQueue.Count > 0) {
                 string msg = msgQueue.Dequeue();
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 stream.Write(data, 0, data.Length);
-                canWrite = false;
             }
 
             if(stream.DataAvailable) {
@@ -146,8 +143,6 @@ namespace VirtualChat {
 
                     textComponent.color = new Color(sender.MyColor.r, sender.MyColor.g, sender.MyColor.b, 1.0f);
                 }
-
-                canWrite = true;
             }
         }
 
