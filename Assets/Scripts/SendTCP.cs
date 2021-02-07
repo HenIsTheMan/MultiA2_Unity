@@ -97,22 +97,32 @@ namespace VirtualChat {
                         }
 
                         string commandIdentifier = txts[0].Substring(2);
-                    } else {
-                        string commandIdentifier = rawStr.Substring(2);
+
                         if(commandIdentifier == "UpdateClients") {
-                            //...??
+                            int txtsCountMinusOne = txts.Count - 1;
+                            int membersToUpdateCount = 5;
+                            UniversalData.ClearClients();
+
+                            for(int offset = 0; offset < txtsCountMinusOne / membersToUpdateCount; ++offset) {
+                                Client client = new Client {
+                                    Index = int.Parse(txts[1 + offset]),
+                                    Username = txts[2 + offset],
+                                    MyColor = new Color(float.Parse(txts[3 + offset]), float.Parse(txts[4 + offset]), float.Parse(txts[5 + offset]))
+                                };
+                                UniversalData.AddClient(client);
+                            }
 
                             if(!isMyClientActivated) {
-                                Client client = new Client {
-                                    Index = UniversalData.CalcAmtOfClients(),
-                                    Username = SavedUsername,
-                                    MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
-                                };
-                                UniversalData.MyClientIndex = client.Index;
-                                UniversalData.AddClient(client);
+                                ActivateClient();
+                                isMyClientActivated = true;
+                            }
+                        }
+                    } else {
+                        string commandIdentifier = rawStr.Substring(2);
 
-                                //SendUpdateClients??
-
+                        if(commandIdentifier == "UpdateClients") {
+                            if(!isMyClientActivated) {
+                                ActivateClient();
                                 isMyClientActivated = true;
                             }
                         }
@@ -137,6 +147,7 @@ namespace VirtualChat {
         }
 
         #endregion
+
         public bool InitClient() {
             try {
                 client = new TcpClient(DstIPAddress, DstPortNumber);
@@ -157,6 +168,29 @@ namespace VirtualChat {
 
         private void SendStr(string msg) {
             msgQueue.Enqueue(msg);
+        }
+
+        private void ActivateClient() {
+            Client client = new Client {
+                Index = UniversalData.CalcAmtOfClients(),
+                Username = SavedUsername,
+                MyColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f, false)
+            };
+            UniversalData.MyClientIndex = client.Index;
+            UniversalData.AddClient(client);
+
+            string msg = "~/UpdateClients ";
+            int clientsSize = UniversalData.CalcAmtOfClients();
+            for(int i = 0; i < clientsSize; ++i){
+                Client currClient = UniversalData.GetClient(i);
+                msg += currClient.Index + ' ';
+                msg += currClient.Username + ' ';
+                msg += currClient.MyColor.r + ' ';
+                msg += currClient.MyColor.g + ' ';
+                msg += currClient.MyColor.b + ' ';
+            }
+
+            SendStr(msg);
         }
     }
 }

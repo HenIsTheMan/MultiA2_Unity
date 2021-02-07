@@ -43,5 +43,9 @@ namespace VirtualChat {
         public static Client GetClient(int index) {
             return clients[index];
         }
+
+        public static void ClearClients() {
+            clients.Clear();
+        }
     }
 }
