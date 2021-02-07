@@ -129,8 +129,6 @@ namespace VirtualChat {
                 remoteEndPt = new IPEndPoint(IPAddress.Parse(DstIPAddress), DstPortNumber);
                 clientUDP.EnableBroadcast = true;
 
-                //sendString("Hello World I am??");
-
                 try {
                     clientUDP.BeginReceive(new AsyncCallback(Receive), null);
                 } catch(Exception e) {
