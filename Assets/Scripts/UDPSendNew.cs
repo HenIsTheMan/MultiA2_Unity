@@ -8,10 +8,9 @@ using UnityEngine.UI;
 
 public class UDPSendNew : MonoBehaviour
 {
-    private static int localPort;
 
-    // prefs
-    public string IP = "127.0.0.1";  // define in init
+	// prefs
+	public string IP = "127.0.0.1";  // define in init
     public int port;  // define in init
     public Text textInput;
 

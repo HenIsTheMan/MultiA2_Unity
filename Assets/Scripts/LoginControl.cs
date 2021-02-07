@@ -85,7 +85,7 @@ namespace VirtualChat {
             }
 
             sendOverNet.DstIPAddress = IPAddressServerTxtBox.text;
-            if(sendOverNet.InitClient()) {
+            if(sendOverNet.Init()) {
                 sendOverNet.SavedUsername = usernameTxtBox.text;
 
                 _ = StartCoroutine(nameof(MoveToChat));
