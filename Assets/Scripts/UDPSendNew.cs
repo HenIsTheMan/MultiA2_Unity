@@ -44,7 +44,9 @@ public class UDPSendNew : MonoBehaviour
         client = new UdpClient();
         client.EnableBroadcast = true;
 
-        sendString("Hello World i am ??");
+        sendString(-1 + " /NewClientJoined " + "Hey");
+
+        _ = StartCoroutine(nameof(Test));
 
         try
         {
@@ -55,6 +57,12 @@ public class UDPSendNew : MonoBehaviour
             Debug.Log(e.ToString());
         }
         // status
+    }
+
+    private System.Collections.IEnumerator Test() {
+        yield return new WaitForSeconds(2);
+
+        sendString(1 + " / Hello World i am ??");
     }
 
     // sendData

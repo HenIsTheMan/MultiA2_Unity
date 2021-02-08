@@ -470,7 +470,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8176398103900907886}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 550f0362460c6f44493a1a8db3ffbe4d, type: 3}
   m_Name: 
@@ -507,8 +507,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c510ec3bbb12a64abeb53de4abb76ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IP: 127.0.0.1
-  port: 5100
+  IP: 192.168.1.221
+  port: 8967
   textInput: {fileID: 8176398103723908434}
 --- !u!1 &8176398103932339951
 GameObject:
@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7931026307634665499}
+      - m_Target: {fileID: 1311532385}
         m_MethodName: OnSendBtnDown
         m_Mode: 1
         m_Arguments:
